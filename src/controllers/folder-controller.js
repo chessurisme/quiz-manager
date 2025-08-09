@@ -69,12 +69,12 @@ export class FolderController {
     }
   }
 
-  loadRecentQuizzes(limit = 5) {
+  loadRecentQuizzes(limit = null) {
     const listEl = document.getElementById("recentQuizList");
     if (!listEl) return;
     const quizzes = Array.from(this.model.quizzes.values());
     quizzes.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
-    const recent = quizzes.slice(0, limit);
+    const recent = typeof limit === "number" && limit > 0 ? quizzes.slice(0, limit) : quizzes;
 
     if (recent.length === 0) {
       listEl.innerHTML = `<p style="opacity:.8">No recent quizzes.</p>`;

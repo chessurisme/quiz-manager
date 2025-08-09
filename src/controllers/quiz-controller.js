@@ -130,6 +130,16 @@ export class QuizController {
     }
 
     container.innerHTML = content;
+    // Ensure newly rendered textareas auto-size to their content
+    const renderedTextareas = container.querySelectorAll('textarea');
+    renderedTextareas.forEach((textarea) => {
+      textarea.style.height = '';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      textarea.addEventListener('input', function () {
+        this.style.height = '';
+        this.style.height = this.scrollHeight + 'px';
+      });
+    });
     this.updateProgressBadge();
   }
 
@@ -299,8 +309,11 @@ export class QuizController {
         if (this.uiController && typeof this.uiController.exitPlayUI === "function") {
           this.uiController.exitPlayUI();
         }
-        if (this.routerController) {
-          this.routerController.goToHome();
+        if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
+          this.routerController.goBackOrHome();
+        } else if (this.uiController && typeof this.uiController.showSearchPage === 'function') {
+          // fall back to home if search page cannot be shown
+          this.uiController.showHomePage();
         } else if (this.uiController) {
           this.uiController.showHomePage();
         }
@@ -325,8 +338,8 @@ export class QuizController {
   exitEditorForce() {
     this.model.currentQuiz = null;
     this.model.currentQuestionIndex = 0;
-    if (this.routerController) {
-      this.routerController.goToHome();
+    if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
+      this.routerController.goBackOrHome();
     } else if (this.uiController) {
       this.uiController.showHomePage();
     }

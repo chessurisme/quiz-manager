@@ -10,6 +10,8 @@ export class RouterController {
     // Router (prefer global Navigo if present; otherwise use an internal stub)
     this._isRealRouter = typeof window !== 'undefined' && !!window.Navigo;
     this.router = this._isRealRouter ? new window.Navigo('/') : this._createStubRouter();
+    // Track a return path so we can exit editor/play back to where the user came from
+    this._returnPath = null;
     
     this.setupRoutes();
   }
@@ -77,7 +79,16 @@ export class RouterController {
 
   navigateToSearch() {
     if (this.uiController) {
-      this.uiController.showSearchPage();
+      // If searchController has previous results, restore them
+      if (this.searchController && (this.searchController.lastResults?.length || 0) > 0) {
+        this.uiController.showSearchPage(
+          this.searchController.lastQuery || "",
+          this.searchController.lastResults || [],
+          this.searchController.lastDetails || []
+        );
+      } else {
+        this.uiController.showSearchPage();
+      }
     }
   }
 
@@ -141,6 +152,7 @@ export class RouterController {
   }
 
   goToQuizEditor(quizId) {
+    this._captureReturnPath();
     this.router.navigate(`/quiz/${quizId}`);
   }
 
@@ -148,14 +160,17 @@ export class RouterController {
     // Backward compatibility: if called with two args, support both signatures
     if (arguments.length === 2) {
       const index = arguments[1];
+      this._captureReturnPath();
       this.router.navigate(`/quiz/${quizId}/q/${index}`);
       return;
     }
     // If only quizId is passed, behave like goToQuizEditor
+    this._captureReturnPath();
     this.router.navigate(`/quiz/${quizId}`);
   }
 
   goToQuizPlay(quizId) {
+    this._captureReturnPath();
     this.router.navigate(`/quiz/${quizId}/play`);
   }
 
@@ -240,5 +255,30 @@ export class RouterController {
     }
     // Fallback
     this.navigateToHome();
+  }
+
+  // Record where to return when entering a quiz editor/play/results
+  _captureReturnPath() {
+    try {
+      const current = this.getCurrentRoute();
+      const pathname = (current && current.pathname) ? current.pathname : '/';
+      // Only capture if we're not already on a quiz route (to avoid overwriting on internal moves)
+      if (!/^\/quiz\//.test(pathname)) {
+        this._returnPath = pathname;
+      }
+    } catch (_) {
+      // no-op
+    }
+  }
+
+  // Navigate back to the captured return path, or home if none
+  goBackOrHome() {
+    const target = this._returnPath;
+    this._returnPath = null;
+    if (typeof target === 'string' && target.length > 0) {
+      this.router.navigate(target);
+    } else {
+      this.goToHome();
+    }
   }
 }

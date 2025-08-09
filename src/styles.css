@@ -140,7 +140,10 @@ select {
   border-right: 1px solid var(--color-stroke-weak);
   transition: left var(--transition-base);
   z-index: 200;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto; /* entire sidebar scrolls */
 }
 
 .sidebar.open {
@@ -160,6 +163,25 @@ select {
 
 .sidebar-section {
   padding: var(--size-base);
+}
+
+/* Sidebar sections are columns so labels and lists stack */
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the last sidebar section (Recent) fill remaining space */
+.sidebar-section:last-child {
+  flex: 1;
+  min-height: 0; /* allow child to scroll within */
+}
+
+/* Recent list fills remaining space; scrolling handled by sidebar */
+#recentQuizList {
+  flex: 1;
+  overflow: visible;
+  padding-right: 4px; /* space for potential scrollbar */
 }
 
 .sidebar-label {
@@ -807,10 +829,16 @@ select {
   color: var(--color-text-strong);
   font-size: calc(var(--size-base) / 1.12);
   resize: none;
-  flex: 1;
   min-height: 40px;
-  overflow: hidden;
+  overflow: hidden; /* prevent scrollbars; JS will auto-grow height */
   line-height: 1.4;
+}
+
+/* Let textarea intrinsic height control size (JS sets height); avoid flex stretching conflicts */
+.quiz-field textarea {
+  flex: 0 0 auto;
+  display: block;
+  max-height: none;
 }
 
 .quiz-field-label {
@@ -887,7 +915,8 @@ select {
 }
 
 .search-result-item {
-  border-left: 3px solid var(--color-brand);
+  /* removed decorative left border for cleaner look */
+  border-left: none;
   background: var(--color-fill);
   margin-bottom: var(--size-xs);
   transition: all var(--transition-base);
@@ -996,8 +1025,9 @@ select {
 }
 
 .search-match-index {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: var(--color-text-strong);
   font-weight: 600;
-  color: var(--color-brand);
 }
 
 .search-match-preview {

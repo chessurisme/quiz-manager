@@ -399,8 +399,8 @@ export class PlayController {
 
   exitToHome() {
     this.session = null;
-    if (this.routerController) {
-      this.routerController.goToHome();
+    if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
+      this.routerController.goBackOrHome();
     } else if (this.uiController && typeof this.uiController.showHomePage === "function") {
       this.uiController.showHomePage();
     }

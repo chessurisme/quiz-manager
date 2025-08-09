@@ -340,11 +340,23 @@
               <div class="settings-row" style="flex-wrap: wrap; gap: var(--size-s); align-items: flex-start;">
                 <div style="min-width: 260px;">
                   <div class="quiz-field-label" style="margin-bottom: 8px;">Quiz Types to Export</div>
-                  <div style="display:flex; gap: 12px; flex-wrap: wrap;">
-                    <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="exportTypeMc"> <span>Multiple Choice</span></label>
-                    <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="exportTypeEj"> <span>Emoji</span></label>
-                    <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="exportTypeRd"> <span>Riddle</span></label>
-                    <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="exportTypeWs"> <span>Word Scramble</span></label>
+                  <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: center;">
+                    <label style="display:flex; gap:10px; align-items:center; font-size:16px; line-height:1;">
+                      <input type="checkbox" id="exportTypeMc" style="width:18px; height:18px;">
+                      <span>Multiple Choice</span>
+                    </label>
+                    <label style="display:flex; gap:10px; align-items:center; font-size:16px; line-height:1;">
+                      <input type="checkbox" id="exportTypeEj" style="width:18px; height:18px;">
+                      <span>Emoji</span>
+                    </label>
+                    <label style="display:flex; gap:10px; align-items:center; font-size:16px; line-height:1;">
+                      <input type="checkbox" id="exportTypeRd" style="width:18px; height:18px;">
+                      <span>Riddle</span>
+                    </label>
+                    <label style="display:flex; gap:10px; align-items:center; font-size:16px; line-height:1;">
+                      <input type="checkbox" id="exportTypeWs" style="width:18px; height:18px;">
+                      <span>Word Scramble</span>
+                    </label>
                   </div>
                   <div style="opacity:.8; font-size:12px; margin-top:6px;">Tip: Leave all unchecked to export everything.</div>
                 </div>
@@ -479,7 +491,33 @@
             <h3 class="modal-title">About</h3>
           </div>
           <div class="modal-content">
-            <p>Quiz Manager. Built with Vanilla JS and Lucide icons.</p>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <section>
+                <div class="sidebar-label" style="margin-bottom:6px;">Quiz Manager</div>
+                <p style="margin:0; opacity:.9;">Create, manage, and play biblical quizzes. Works offline and keeps your data private.</p>
+              </section>
+              <section>
+                <div class="sidebar-label" style="margin-bottom:6px;">Data & Privacy</div>
+                <ul style="margin:0 0 6px 16px; padding:0; line-height:1.5;">
+                  <li>Your quizzes and folders are stored locally using IndexedDB.</li>
+                  <li>No accounts, no cloud sync by default.</li>
+                  <li>Use Data Management to export/import your data anytime.</li>
+                </ul>
+              </section>
+              <section>
+                <div class="sidebar-label" style="margin-bottom:6px;">Credits</div>
+                <ul style="margin:0 0 6px 16px; padding:0; line-height:1.5;">
+                  <li>Icons: Lucide</li>
+                  <li>Bundler: Vite</li>
+                  <li>ZIP: JSZip</li>
+                  <li>Routing: Navigo</li>
+                </ul>
+              </section>
+              <section>
+                <div class="sidebar-label" style="margin-bottom:6px;">Version</div>
+                <p style="margin:0; opacity:.9;">1.0.0</p>
+              </section>
+            </div>
           </div>
           <div class="modal-actions"></div>
         </div>

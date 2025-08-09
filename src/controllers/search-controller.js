@@ -3,6 +3,10 @@ export class SearchController {
     this.quizController = dependencies.quizController;
     this.uiController = dependencies.uiController;
     this.routerController = dependencies.routerController;
+    // Persist last search so returning to /search can restore results
+    this.lastQuery = "";
+    this.lastResults = [];
+    this.lastDetails = [];
   }
 
   performSearch() {
@@ -20,12 +24,11 @@ export class SearchController {
       const indexMatches = [];
       const summaryDetails = [];
 
-      // Check quiz name (any token or phrase match)
+      // Check quiz name (any token or phrase match) – informational only; don't include quiz by name alone
       if (quiz.name) {
         const nameLc = String(quiz.name).toLowerCase();
         const anyNameMatch = this._matchesAny(nameLc, tokens, phrases);
         if (anyNameMatch) {
-          matchFound = true;
           summaryDetails.push(`Quiz name: "${quiz.name}"`);
         }
       }
@@ -92,7 +95,7 @@ export class SearchController {
         });
 
         const phrasesOk = !phrases.length || phrases.every(p => foundPhrases.has(p));
-        const tokensOk = !tokens.length || foundTokens.size > 0; // loose token match (OR)
+        const tokensOk = !tokens.length || tokens.every(t => foundTokens.has(t)); // require ALL tokens within the same item (AND)
         foundInThisIndex = phrasesOk && tokensOk;
 
         if (foundInThisIndex) {
@@ -101,7 +104,8 @@ export class SearchController {
         }
       }
 
-      if (matchFound) {
+      // Only include quizzes that have at least one question-level match
+      if (indexMatches.length > 0) {
         results.push(quiz);
         searchDetails.push({
           quizId: quiz.id,
@@ -125,6 +129,11 @@ export class SearchController {
       }
       return;
     }
+
+    // Persist last results so navigating back to /search restores the view
+    this.lastQuery = query;
+    this.lastResults = results;
+    this.lastDetails = searchDetails;
 
     // Navigate to search page and display results
     if (this.routerController) {
@@ -186,7 +195,7 @@ export class SearchController {
         const preview = pieces.join(' · ');
         return `
           <div class="search-match-row" onclick="searchController.jumpToMatch(event, '${quiz.id}', ${m.index})">
-            <span class="search-match-index">Index ${m.index + 1}</span>
+            <span class="search-match-index" aria-label="Index">${m.index + 1}</span>
             <span class="search-match-preview">${preview || 'Match'}</span>
           </div>
         `;

@@ -813,6 +813,14 @@ export class UIController {
     }
     this.closeModal("quizOptionsModal");
     this.openModal("jumpToQuestionModal");
+    // Ensure the input is focused so the keyboard shows on mobile
+    setTimeout(() => {
+      const el = document.getElementById("jumpQuestionInput");
+      if (el) {
+        el.focus();
+        if (typeof el.select === "function") el.select();
+      }
+    }, 0);
   }
 
   confirmJumpToQuestion() {
@@ -1090,8 +1098,8 @@ export class UIController {
   }
 
   exitSettings() {
-    if (this.routerController) {
-      this.routerController.goToHome();
+    if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
+      this.routerController.goBackOrHome();
     } else {
       this.showHomePage();
     }

@@ -1,5 +1,5 @@
 // Update this version number whenever you want to force cache updates
-const CACHE_VERSION = 'v3'; // Change this when you update your app
+const CACHE_VERSION = 'v4'; // Change this when you update your app
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 const SHARE_CACHE = 'share-cache';
 const OFFLINE_URL = '/offline.html';
@@ -11,8 +11,8 @@ const PRECACHE_URLS = [
   OFFLINE_URL,
   '/manifest.json',
   // Built assets (from public/index.html)
-  '/assets/index-BF6Cwd5A.js',
-  '/assets/index-CTydV_f4.css',
+  '/assets/index-BAQsgH83.js',
+  '/assets/index-D2fjRAHm.css',
   // Icons used by browser/tab, iOS touch, and PWA install
   '/assets/favicons/ios/16.png',
   '/assets/favicons/ios/32.png',
