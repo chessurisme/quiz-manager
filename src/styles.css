@@ -717,20 +717,17 @@ select {
 }
 
 .quiz-grid-mc {
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto auto;
-	grid-template-areas:
-		"question question question question"
-		"choice-1 choice-1 choice-2 choice-2"
-		"choice-3 choice-3 choice-4 choice-4"
-		"references-section references-section references-section difficulty-section";
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(5, 1fr);
 	gap: var(--size-base);
 	align-items: stretch;
 	min-height: 400px;
 }
 
 .quiz-grid-mc .question {
-	grid-area: question;
+	grid-column: span 4 / span 4;
+	grid-row-start: 1;
 	width: 100%;
 	min-height: 80px;
 	display: flex;
@@ -738,45 +735,56 @@ select {
 }
 
 .quiz-grid-mc .choice-1 {
-	grid-area: choice-1;
+	grid-column: span 2 / span 2;
+	grid-row-start: 2;
 	min-height: 60px;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 }
 
 .quiz-grid-mc .choice-2 {
-	grid-area: choice-2;
+	grid-column: span 2 / span 2;
+	grid-column-start: 3;
+	grid-row-start: 2;
 	min-height: 60px;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 }
 
 .quiz-grid-mc .choice-3 {
-	grid-area: choice-3;
+	grid-column: span 2 / span 2;
+	grid-row-start: 3;
 	min-height: 60px;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 }
 
 .quiz-grid-mc .choice-4 {
-	grid-area: choice-4;
+	grid-column: span 2 / span 2;
+	grid-column-start: 3;
+	grid-row-start: 3;
 	min-height: 60px;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 }
 
 .quiz-grid-mc .references-section {
-	grid-area: references-section;
+	grid-column: span 3 / span 3;
+	grid-row-start: 4;
 	width: 100%;
-	height: 80px;
+	min-height: 80px;
 	display: flex;
 	flex-direction: column;
 }
 
 .quiz-grid-mc .difficulty-section {
-	grid-area: difficulty-section;
+	grid-column-start: 4;
+	grid-row-start: 4;
 	width: 100%;
-	height: 80px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -827,7 +835,7 @@ select {
 .quiz-grid-scramble .references-section {
 	grid-area: references-section;
 	width: 100%;
-	height: 80px;
+	min-height: 80px;
 	display: flex;
 	flex-direction: column;
 }
@@ -973,7 +981,6 @@ select {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	min-width: 120px;
 	justify-content: center;
 	align-items: center;
 	background: var(--color-background);
@@ -1354,14 +1361,49 @@ select {
 	}
 
 	.quiz-grid-mc {
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-		grid-template-rows: auto auto auto auto;
-		grid-template-areas:
-			"question question question question"
-			"choice-1 choice-1 choice-2 choice-2"
-			"choice-3 choice-3 choice-4 choice-4"
-			"references-section references-section references-section difficulty-section";
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(5, 1fr);
 		gap: var(--size-xs);
+		align-items: stretch;
+		min-height: 400px;
+	}
+
+	.quiz-grid-mc .question {
+		grid-column: span 4 / span 4;
+		grid-row-start: 1;
+	}
+
+	.quiz-grid-mc .choice-1 {
+		grid-column: span 2 / span 2;
+		grid-row-start: 2;
+	}
+
+	.quiz-grid-mc .choice-2 {
+		grid-column: span 2 / span 2;
+		grid-column-start: 3;
+		grid-row-start: 2;
+	}
+
+	.quiz-grid-mc .choice-3 {
+		grid-column: span 2 / span 2;
+		grid-row-start: 3;
+	}
+
+	.quiz-grid-mc .choice-4 {
+		grid-column: span 2 / span 2;
+		grid-column-start: 3;
+		grid-row-start: 3;
+	}
+
+	.quiz-grid-mc .references-section {
+		grid-column: span 3 / span 3;
+		grid-row-start: 4;
+	}
+
+	.quiz-grid-mc .difficulty-section {
+		grid-column-start: 4;
+		grid-row-start: 4;
 	}
 
 	.quiz-grid-emoji {
@@ -1484,7 +1526,7 @@ select {
 
 .quiz-play-choice {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	gap: var(--size-base);
 	padding: var(--size-base) var(--size-l);
 	background: var(--color-fill);
@@ -1532,6 +1574,12 @@ select {
 	color: var(--color-text-strong);
 	font-weight: 500;
 	flex: 1;
+	word-wrap: break-word;
+	word-break: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+	line-height: 1.4;
+	padding-top: 2px;
 }
 
 /* Grid area assignments for play mode choices */
@@ -1646,7 +1694,8 @@ select {
 }
 
 /* References section - normal case */
-.references-section input[type="text"] {
+.references-section input[type="text"],
+.references-section textarea {
 	text-transform: none;
 	font-weight: 400;
 	letter-spacing: normal;
@@ -1722,6 +1771,7 @@ select {
 
 	.quiz-play-choice {
 		padding: var(--size-s) var(--size-base);
+		align-items: flex-start;
 	}
 
 

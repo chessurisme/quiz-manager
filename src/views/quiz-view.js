@@ -7,7 +7,7 @@ export class QuizView {
       return `
         <div class="quiz-play-container">
           <div class="quiz-play-question">
-            <h2>${question.question || "Multiple Choice Question"}</h2>
+            <p>${question.question || "Multiple Choice Question"}</p>
           </div>
           <div class="quiz-play-choices">
             ${(question.choices || []).map((choice, choiceIndex) => `
@@ -31,28 +31,24 @@ export class QuizView {
             }</textarea>
         </div>
         <div class="quiz-field choice-1">
-          <div class="quiz-field-label">Choice 1</div>
           <textarea placeholder="Enter choice 1..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'choices.0', this.value)">${
               (question.choices && question.choices[0]) || ""
             }</textarea>
         </div>
         <div class="quiz-field choice-2">
-          <div class="quiz-field-label">Choice 2</div>
           <textarea placeholder="Enter choice 2..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'choices.1', this.value)">${
               (question.choices && question.choices[1]) || ""
             }</textarea>
         </div>
         <div class="quiz-field choice-3">
-          <div class="quiz-field-label">Choice 3</div>
           <textarea placeholder="Enter choice 3..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'choices.2', this.value)">${
               (question.choices && question.choices[2]) || ""
             }</textarea>
         </div>
         <div class="quiz-field choice-4">
-          <div class="quiz-field-label">Choice 4</div>
           <textarea placeholder="Enter choice 4..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'choices.3', this.value)">${
               (question.choices && question.choices[3]) || ""
@@ -120,7 +116,8 @@ export class QuizView {
           <div class="quiz-field-label">References</div>
           <textarea placeholder="Enter references..." 
             ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">${
+            onchange="quizController.updateQuestion(${index}, 'references', this.value)"
+            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${
               question.references || ""
             }</textarea>
         </div>
@@ -188,9 +185,12 @@ export class QuizView {
         </div>
         <div class="quiz-field references-section">
           <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
+          <textarea placeholder="Enter references..." 
             ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+            onchange="quizController.updateQuestion(${index}, 'references', this.value)"
+            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${
+              question.references || ""
+            }</textarea>
         </div>
         <div class="quiz-field difficulty-section">
           <div class="difficulty-icons" ondblclick="quizController.toggleDifficulty(${index})">
@@ -257,9 +257,12 @@ export class QuizView {
         </div>
         <div class="quiz-field references-section">
           <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
+          <textarea placeholder="Enter references..." 
             ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+            onchange="quizController.updateQuestion(${index}, 'references', this.value)"
+            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${
+              question.references || ""
+            }</textarea>
         </div>
         <div class="quiz-field difficulty-section">
           <div class="difficulty-icons" ondblclick="quizController.toggleDifficulty(${index})">

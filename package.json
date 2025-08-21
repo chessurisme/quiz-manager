@@ -1,6 +1,6 @@
 {
   "name": "quiz-manager",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "module": "src/index.js",
   "devDependencies": {
     "@types/bun": "latest",
