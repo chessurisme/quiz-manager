@@ -22,7 +22,7 @@ export class QuizModel {
     return folder;
   }
 
-  createQuiz(name, type, folderId = null) {
+  createQuiz(name, type, folderId = null, defaultDifficulty = "medium") {
     const id = type + "_" + Date.now();
     const quiz = {
       id,
@@ -35,7 +35,7 @@ export class QuizModel {
       updatedAt: new Date().toISOString(),
     };
 
-    quiz.questions.push(this.createEmptyQuestion(type));
+    quiz.questions.push(this.createEmptyQuestion(type, defaultDifficulty));
     this.quizzes.set(id, quiz);
 
     if (folderId && this.folders.has(folderId)) {
@@ -45,13 +45,14 @@ export class QuizModel {
     return quiz;
   }
 
-  createEmptyQuestion(type) {
+  createEmptyQuestion(type, difficulty = "medium") {
     switch (type) {
       case "mc-quiz":
         return {
           question: "",
           choices: ["", "", "", ""],
           references: "",
+          difficulty: difficulty,
         };
       case "ej-quiz":
         return {
@@ -59,17 +60,20 @@ export class QuizModel {
           emoji: "",
           answers: [""],
           references: "",
+          difficulty: difficulty,
         };
       case "rd-quiz":
         return {
           question: "",
           answers: [""],
           references: "",
+          difficulty: difficulty,
         };
       case "ws-quiz":
         return {
           word: "",
           scrambledWord: "",
+          difficulty: difficulty,
         };
       default:
         return {};
@@ -138,10 +142,32 @@ export class QuizModel {
 
     if (savedQuizzes && Array.isArray(savedQuizzes)) {
       this.quizzes = new Map(savedQuizzes);
+      // Migrate existing questions to include difficulty
+      this.migrateQuestionsToIncludeDifficulty();
     }
 
     if (savedFolders && Array.isArray(savedFolders)) {
       this.folders = new Map(savedFolders);
+    }
+  }
+
+  migrateQuestionsToIncludeDifficulty() {
+    let needsSave = false;
+    for (const [quizId, quiz] of this.quizzes) {
+      if (quiz.questions && Array.isArray(quiz.questions)) {
+        for (const question of quiz.questions) {
+          if (!question.difficulty) {
+            question.difficulty = "medium";
+            needsSave = true;
+          }
+        }
+        if (needsSave) {
+          this.quizzes.set(quizId, quiz);
+        }
+      }
+    }
+    if (needsSave) {
+      this.saveQuizzes();
     }
   }
 

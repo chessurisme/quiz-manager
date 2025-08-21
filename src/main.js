@@ -6,6 +6,8 @@ import { PlayController } from "./controllers/play-controller.js";
 import { SearchController } from "./controllers/search-controller.js";
 import { RouterController } from "./controllers/router-controller.js";
 import { storage } from "./storage/indexeddb.js";
+import { SWManager } from "./sw-manager.js";
+import { AudioManager } from "./utils/audio-manager.js";
 import JSZip from "jszip";
 import { createIcons as lucideCreateIcons, icons as lucideIcons } from "lucide";
 
@@ -78,6 +80,14 @@ window.lucide = {
   createIcons: (options = {}) => lucideCreateIcons({ icons: lucideIcons, ...options })
 };
 
+// Initialize audio manager
+const audioManager = new AudioManager();
+window.audioManager = audioManager;
+
+// Initialize service worker manager
+const swManager = new SWManager();
+window.swManager = swManager;
+
 // Initialize app
 document.addEventListener("DOMContentLoaded", async () => {
   // Apply saved theme early (theme stays in localStorage)
@@ -148,6 +158,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Initialize auto-grow on page load
   initializeAutoGrow();
+
+  // Set up global navigation protection for play mode
+  window.addEventListener('popstate', (e) => {
+    // Check if we're in play mode with an active session
+    if (window.playController && window.playController.session && window.playController.session.currentIndex > 0 && !window.playController.isQuizCompleted) {
+      // Prevent the navigation by pushing the current state back
+      const currentPath = window.location.pathname;
+      history.pushState(null, '', currentPath);
+      
+      // Show warning message
+      if (window.uiController && typeof window.uiController.showAlert === "function") {
+        window.uiController.showAlert(
+          "Please use the Exit button to leave the quiz, or continue playing to save your progress.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please use the Exit button to leave the quiz, or continue playing to save your progress.");
+      }
+    }
+  });
+
+  // Set up global beforeunload protection for play mode
+  window.addEventListener('beforeunload', (e) => {
+    // Check if we're in play mode with an active session
+    if (window.playController && window.playController.session && window.playController.session.currentIndex > 0 && !window.playController.isQuizCompleted) {
+      e.preventDefault();
+      e.returnValue = 'You have an active quiz session. Are you sure you want to leave?';
+      return e.returnValue;
+    }
+  });
 
   // Set up a mutation observer to handle dynamically added textareas
   const observer = new MutationObserver((mutations) => {

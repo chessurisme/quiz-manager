@@ -136,27 +136,51 @@ export class RouterController {
 
   // Navigation methods for controllers to use
   goToHome() {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     this.router.navigate('/');
   }
 
   goToFolder(folderId) {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     this.router.navigate(`/folder/${folderId}`);
   }
 
   goToSearch() {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     this.router.navigate('/search');
   }
 
   goToSettings() {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     this.router.navigate('/settings');
   }
 
   goToQuizEditor(quizId) {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     this._captureReturnPath();
     this.router.navigate(`/quiz/${quizId}`);
   }
 
   goToQuizQuestion(quizId) {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     // Backward compatibility: if called with two args, support both signatures
     if (arguments.length === 2) {
       const index = arguments[1];
@@ -273,12 +297,35 @@ export class RouterController {
 
   // Navigate back to the captured return path, or home if none
   goBackOrHome() {
+    if (this._shouldBlockNavigation()) {
+      this._showPlayModeNavigationWarning();
+      return;
+    }
     const target = this._returnPath;
     this._returnPath = null;
     if (typeof target === 'string' && target.length > 0) {
       this.router.navigate(target);
     } else {
       this.goToHome();
+    }
+  }
+
+  _shouldBlockNavigation() {
+    // Check if we're in play mode with an active session AND quiz is not completed
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      return true;
+    }
+    return false;
+  }
+
+  _showPlayModeNavigationWarning() {
+    if (this.uiController && typeof this.uiController.showAlert === "function") {
+      this.uiController.showAlert(
+        "Please finish or exit your current quiz before navigating to other pages.",
+        "Navigation Blocked"
+      );
+    } else {
+      alert("Please finish or exit your current quiz before navigating to other pages.");
     }
   }
 }

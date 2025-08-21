@@ -87,7 +87,7 @@ export class ImportController {
     if (isFullQuizExport) {
       const type = data.type;
       const name = (this.fileNameBase && this.fileNameBase.trim()) || data.name || "Imported Quiz";
-      const quiz = (this.quizController || window.quizController).model.createQuiz(name, type);
+      const quiz = (this.quizController || window.quizController).model.createQuiz(name, type, null, "medium");
       quiz.questions = (Array.isArray(data.questions) ? data.questions : []).map((q) => this.normalizeQuestion(q, type));
       (this.quizController || window.quizController).model.saveQuiz(quiz);
       if (this.uiController) {
@@ -119,7 +119,9 @@ export class ImportController {
     const inferredName = (this.fileNameBase && this.fileNameBase.trim()) || "Imported Quiz";
     const quiz = (this.quizController || window.quizController).model.createQuiz(
       inferredName,
-      quizType
+      quizType,
+      null,
+      "medium"
     );
 
     if (Array.isArray(data)) {
@@ -213,36 +215,35 @@ export class ImportController {
         const content = await readFileAsText(file);
         const data = JSON.parse(content);
 
-        // Determine if full quiz export
-        const isFullQuizExport = data && typeof data === "object" && Array.isArray(data.questions) && typeof data.type === "string";
-        if (isFullQuizExport) {
+        // Otherwise treat as individual quiz JSON
+        const isFullQuiz = data && typeof data === "object" && Array.isArray(data.questions) && typeof data.type === "string";
+        if (isFullQuiz) {
           const type = data.type;
-          const rawName = String(file.name || "").trim();
-          const nameFromFile = rawName ? rawName.replace(/\.[^/.]+$/, "") : null;
-          const name = (nameFromFile && nameFromFile.trim()) || data.name || "Imported Quiz";
-          const quiz = (this.quizController || window.quizController).model.createQuiz(name, type);
+          const base = String(file.name || "").replace(/\.[^/.]+$/, "");
+          const quizName = (base && base.trim()) || data.name || "Imported Quiz";
+          const quiz = (this.quizController || window.quizController).model.createQuiz(quizName, type, null, "medium");
           quiz.questions = (Array.isArray(data.questions) ? data.questions : []).map((q) => this.normalizeQuestion(q, type));
           (this.quizController || window.quizController).model.saveQuiz(quiz);
           importedQuizIds.push(quiz.id);
           continue;
         }
 
-        // Question-only formats
+        // Question-only
         const quizType = this.detectQuizType(data);
-        if (!quizType) {
-          failedCount += 1;
-          continue;
-        }
-        const rawName = String(file.name || "").trim();
-        const inferredName = (rawName ? rawName.replace(/\.[^/.]+$/, "") : null) || "Imported Quiz";
-        const quiz = (this.quizController || window.quizController).model.createQuiz(inferredName, quizType);
-        if (Array.isArray(data)) {
-          quiz.questions = data.map((item) => this.convertToQuestion(item, quizType));
+        if (quizType) {
+          const base = String(file.name || "").replace(/\.[^/.]+$/, "");
+          const inferredName = (base && base.trim()) || "Imported Quiz";
+          const quiz = (this.quizController || window.quizController).model.createQuiz(inferredName, quizType, null, "medium");
+          if (Array.isArray(data)) {
+            quiz.questions = data.map((item) => this.convertToQuestion(item, quizType));
+          } else {
+            quiz.questions = [this.convertToQuestion(data, quizType)];
+          }
+          (this.quizController || window.quizController).model.saveQuiz(quiz);
+          importedQuizIds.push(quiz.id);
         } else {
-          quiz.questions = [this.convertToQuestion(data, quizType)];
+          failedCount += 1;
         }
-        (this.quizController || window.quizController).model.saveQuiz(quiz);
-        importedQuizIds.push(quiz.id);
       } catch (_err) {
         failedCount += 1;
       }

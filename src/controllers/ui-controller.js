@@ -11,62 +11,58 @@ export class UIController {
 
   // Welcome messages array
   welcomeMessages = [
+    "Welcome to Quiz Manager! 🎯",
     "Let your light shine through knowledge! ✨",
-    "Wisdom begins with the fear of the Lord 📖",
-    "Study to show yourself approved unto God 🎯",
+    "Wisdom begins with the fear of Jehovah 📖",
     "The truth will set you free! 🕊️",
-    "Blessed are those who hunger for knowledge 🍞",
+    "Blessed are those hungering for righteousness 🍞",
     "Every quiz is a step toward wisdom 🧠",
-    "Knowledge is power - keep growing! 💪",
-    "Your mind is a garden - plant good seeds 🌱",
-    "Learning is a journey, not a destination 🛤️",
-    "Challenge yourself to grow stronger every day 🌟",
-    "You've got this! Believe in yourself 💫",
-    "Every expert was once a beginner 🚀",
-    "Your potential is limitless! ⭐",
-    "Today is your day to shine! ☀️",
-    "You're capable of amazing things! 🌈",
-    "Ready to test your knowledge? Let's go! 🎯",
-    "Quiz time - where learning meets fun! 🎮",
-    "Challenge accepted! Time to ace this quiz 🏆",
-    "Your brain is ready for this workout! 💪",
-    "Knowledge check - you're going to do great! 📚",
-    "Like David facing Goliath - you've got this! 🗡️",
-    "Be as wise as Solomon in your studies 👑",
-    "Faith like Abraham - step into the unknown! 🏔️",
-    "Strong like Samson, but wiser! 💪",
-    "Patient like Job - your time will come! ⏳",
-    "Today's the day to learn something new! 🌅",
-    "Your future self will thank you for studying 📖",
+    "Your mind is a garden—plant good seeds 🌱",
     "Small steps lead to big achievements 🐾",
-    "You're building a brighter tomorrow! 🌟",
-    "Every question answered is progress made! 📈",
-    "Approach each challenge with confidence! 💎",
-    "Your attitude determines your altitude! 🚁",
-    "Stay curious, stay hungry for knowledge! 🔍",
-    "Embrace the learning process! 🌊",
-    "You're stronger than you think! 💪",
-    "Success is built one quiz at a time! 🏗️",
-    "You're on the path to greatness! 🌟",
+    "Be as wise as Solomon in your studies 👑",
+    "Faith like Abraham—step into the unknown 🏔️",
+    "Patient like Job—your time will come ⏳",
+    "Trust in Jehovah with all your heart ❤️",
+    "Be strong and courageous! 💪",
+    "The joy of Jehovah is your strength 😊",
+    "Walk by faith, not by sight 👁️",
+    "Jehovah’s plans for you are good 🙏",
     "Every correct answer is a victory! 🎉",
     "Your knowledge is your superpower! ⚡",
-    "You're becoming unstoppable! 🚀",
-    "Trust in the Lord with all your heart ❤️",
-    "Be strong and courageous! 💪",
-    "The joy of the Lord is your strength! 😊",
-    "Walk by faith, not by sight 👁️",
-    "God's plans for you are good! 🙏",
-    "Time to make your brain cells dance! 💃",
-    "Your neurons are ready to party! 🎊",
-    "Let's turn those question marks into exclamation points! ❓➡️❗",
-    "Brain workout time - let's get mental! 🧠💪",
-    "Ready to rock this quiz? Let's roll! 🎸",
-    "Keep going, you're doing great! 🎯",
-    "Persistence beats resistance! 🔄",
-    "Don't give up - you're almost there! 🏁",
-    "Every attempt makes you stronger! 💪",
-    "You're building resilience with every quiz! 🛡️"
+    "Keep seeking, keep finding 📚",
+    "Diligence brings rich rewards 💎",
+    "Meditate on what you learn 🪷",
+    "Let love guide your learning ❤️",
+    "Stay curious, stay humble 🔍",
+    "Rejoice in small victories 🎊",
+    "Persistence brings progress 🛠️",
+    "Remember your Creator in your youth 🌅",
+    "A wise heart accepts instruction 📖",
+    "Good friends sharpen one another 🔪",
+    "Guard your heart—it is the source of life 💖",
+    "Speak truth with kindness 🌼",
+    "Patience is better than pride 🕰️",
+    "A joyful heart makes for good learning 😊",
+    "Ask, and it will be given 🙌",
+    "Plan your steps, but trust Jehovah 🗺️",
+    "Learn with a willing spirit ✍️",
+    "Take a deep breath—Jehovah cares 🌬️",
+    "Break time! Stretch a little ☕",
+    "Pause and thank Jehovah for wisdom 🙏",
+    "Hydrate before your next quiz 💧",
+    "Rest your eyes for a moment 👀",
+    "Smile—you’re making progress 😄",
+    "Time for a 2-minute walk 🚶",
+    "Encourage someone else today 🤝",
+    "Think on things that are true and noble 🕊️",
+    "Apply what you learn in daily life 🔑",
+    "Let endurance have its work 🏃",
+    "Keep your goal in sight 🎯",
+    "You’re building treasures that last forever 🌟",
+    "Finish strong—you’ve got this! 🏆",
+    "Jehovah blesses your efforts 💐"
   ];
+  
 
   // Function to update welcome message
   updateWelcomeMessage() {
@@ -287,6 +283,38 @@ export class UIController {
     this.openModal("settingsThemeModal");
   }
 
+  openSettingsAudio() {
+    // sync audio controls before showing
+    if (window.audioManager) {
+      const muteBtn = document.getElementById('audioMuteToggle');
+      const muteIcon = document.getElementById('audioMuteIcon');
+      const muteText = document.getElementById('audioMuteText');
+      const volumeSlider = document.getElementById('audioVolumeSlider');
+      const volumeValue = document.getElementById('audioVolumeValue');
+      
+      if (muteBtn && muteIcon && muteText) {
+        if (window.audioManager.isMuted) {
+          muteIcon.setAttribute('data-lucide', 'volume-x');
+          muteText.textContent = 'Muted';
+        } else {
+          muteIcon.setAttribute('data-lucide', 'volume-2');
+          muteText.textContent = 'Unmuted';
+        }
+      }
+      
+      if (volumeSlider && volumeValue) {
+        volumeSlider.value = Math.round(window.audioManager.volume * 100);
+        volumeValue.textContent = Math.round(window.audioManager.volume * 100) + '%';
+      }
+      
+      // Refresh icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+    this.openModal("settingsAudioModal");
+  }
+
   openSettingsData() {
     this.openModal("settingsDataModal");
   }
@@ -309,6 +337,44 @@ export class UIController {
 
   openSettingsAbout() {
     this.openModal("settingsAboutModal");
+  }
+
+  openSettingsUpdate() {
+    this.openModal("settingsUpdateModal");
+    this.updateUpdateModalInfo();
+  }
+
+  updateUpdateModalInfo() {
+    // Update the modal with current service worker status
+    const currentAppVersion = document.getElementById("currentAppVersion");
+    const swStatus = document.getElementById("swStatus");
+    const updateStatus = document.getElementById("updateStatus");
+    const checkUpdateBtn = document.getElementById("checkUpdateBtn");
+    
+         if (currentAppVersion) {
+       currentAppVersion.textContent = "1.5.0"; // This could be made dynamic
+     }
+    
+    if (swStatus && window.swManager) {
+      if (window.swManager.registration) {
+        swStatus.textContent = "Active";
+        swStatus.style.color = "var(--color-success)";
+      } else {
+        swStatus.textContent = "Not Available";
+        swStatus.style.color = "var(--color-error)";
+      }
+    }
+    
+    // Hide any previous update status
+    if (updateStatus) {
+      updateStatus.style.display = "none";
+    }
+    
+    // Enable the check update button
+    if (checkUpdateBtn) {
+      checkUpdateBtn.disabled = false;
+      checkUpdateBtn.innerHTML = '<i data-lucide="refresh-cw" width="20" height="20"></i> Check for Updates';
+    }
   }
 
   // Settings: Data Management
@@ -349,14 +415,31 @@ export class UIController {
       "ws-quiz": !!document.getElementById("exportTypeWs")?.checked,
     };
     const anyChecked = Object.values(typeFilters).some(Boolean);
+    // Track used filenames to avoid duplicates
+    const usedFilenames = new Set();
+    
     quizzesArr.forEach((quiz) => {
       if (anyChecked) {
         // Only include selected types
         if (!typeFilters[quiz.type]) return;
       }
       const type = byType[quiz.type] ? quiz.type : "unknown";
-      const filename = `${sanitize(quiz.name)}__${quiz.id}.json`;
-      byType[type].file(filename, JSON.stringify(quiz, null, 2));
+      
+      // Generate unique filename
+      let filename = `${sanitize(quiz.name)}.json`;
+      let counter = 1;
+      while (usedFilenames.has(filename)) {
+        filename = `${sanitize(quiz.name)}_${counter}.json`;
+        counter++;
+      }
+      usedFilenames.add(filename);
+      
+      // Include folder information in the exported quiz data
+      const quizData = { ...quiz };
+      if (quiz.folderId) {
+        quizData.folderId = quiz.folderId;
+      }
+      byType[type].file(filename, JSON.stringify(quizData, null, 2));
     });
 
     const blob = await zip.generateAsync({ type: "blob" });
@@ -404,10 +487,22 @@ export class UIController {
         const isFullQuiz = data && typeof data === "object" && Array.isArray(data.questions) && typeof data.type === "string";
         if (isFullQuiz) {
           const type = data.type;
-          const base = String(name || "").replace(/\.[^/.]+$/, "");
+          // Extract just the filename without path and extension
+          const base = String(name || "").split('/').pop().replace(/\.[^/.]+$/, "");
           const quizName = (base && base.trim()) || data.name || "Imported Quiz";
-          const quiz = model.createQuiz(quizName, type);
+          const quiz = model.createQuiz(quizName, type, null, "medium");
           quiz.questions = (Array.isArray(data.questions) ? data.questions : []).map((q) => importController.normalizeQuestion(q, type));
+          
+          // Restore folder assignment if it exists in the exported data
+          if (data.folderId && typeof model.assignQuizToFolder === "function") {
+            // Check if the folder still exists before assigning
+            if (model.folders && model.folders.has(data.folderId)) {
+              model.assignQuizToFolder(quiz.id, data.folderId);
+            } else {
+              console.warn(`Folder ${data.folderId} not found for quiz ${quizName}, quiz will be unassigned`);
+            }
+          }
+          
           model.saveQuiz(quiz);
           importedQuizIds.push(quiz.id);
           return { ok: true, imported: 1 };
@@ -416,14 +511,26 @@ export class UIController {
         // Question-only
         const quizType = importController.detectQuizType(data);
         if (quizType) {
-          const base = String(name || "").replace(/\.[^/.]+$/, "");
+          // Extract just the filename without path and extension
+          const base = String(name || "").split('/').pop().replace(/\.[^/.]+$/, "");
           const inferredName = (base && base.trim()) || "Imported Quiz";
-          const quiz = model.createQuiz(inferredName, quizType);
+          const quiz = model.createQuiz(inferredName, quizType, null, "medium");
           if (Array.isArray(data)) {
             quiz.questions = data.map((item) => importController.convertToQuestion(item, quizType));
           } else {
             quiz.questions = [importController.convertToQuestion(data, quizType)];
           }
+          
+          // Restore folder assignment if it exists in the exported data
+          if (data.folderId && typeof model.assignQuizToFolder === "function") {
+            // Check if the folder still exists before assigning
+            if (model.folders && model.folders.has(data.folderId)) {
+              model.assignQuizToFolder(quiz.id, data.folderId);
+            } else {
+              console.warn(`Folder ${data.folderId} not found for quiz ${inferredName}, quiz will be unassigned`);
+            }
+          }
+          
           model.saveQuiz(quiz);
           importedQuizIds.push(quiz.id);
           return { ok: true, imported: 1 };
@@ -450,16 +557,69 @@ export class UIController {
     // Process ZIP archives
     for (const file of zipFiles) {
       try {
+
         const arrayBuffer = await file.arrayBuffer();
         const zip = await JSZip.loadAsync(arrayBuffer);
-        const entries = Object.values(zip.files).filter((f) => !f.dir && /\.json$/i.test(f.name));
-        for (const entry of entries) {
+        
+        // First, import folders to restore structure
+        const foldersEntry = zip.file("folders.json");
+        console.log('Folders entry found:', !!foldersEntry);
+        if (foldersEntry) {
           try {
+            const foldersText = await foldersEntry.async("text");
+            const foldersData = JSON.parse(foldersText);
+            console.log('Folders data:', foldersData);
+            if (Array.isArray(foldersData)) {
+              model.folders = new Map(foldersData);
+              console.log('Imported folders:', model.folders.size);
+              if (typeof model.saveFolders === "function") {
+                await model.saveFolders();
+              }
+            }
+          } catch (_e) {
+            console.error('Error importing folders:', _e);
+            failedFiles.push(`${file.name}::folders.json`);
+          }
+        }
+        
+        // Debug: Log all files in the ZIP to see the structure
+        console.log('All files in ZIP:', Object.values(zip.files).map(f => ({ name: f.name, dir: f.dir, size: f._data.uncompressedSize })));
+        
+        // Then import quizzes - be more inclusive with the filter
+        const quizEntries = Object.values(zip.files).filter((f) => 
+          !f.dir && 
+          /\.json$/i.test(f.name) && 
+          !f.name.match(/^(meta|folders)\.json$/i) && // Skip root-level metadata files
+          !f.name.endsWith('/') // Ensure it's not a directory marker
+        );
+        
+        // Debug logging to see what files we're finding
+        console.log('Found quiz entries:', quizEntries.map(f => f.name));
+        console.log('Total quiz entries found:', quizEntries.length);
+        
+        for (const entry of quizEntries) {
+          try {
+            console.log(`Processing quiz entry: ${entry.name}`);
             const text = await entry.async("text");
             const res = await processJson(entry.name, text);
+            console.log(`Process result for ${entry.name}:`, res);
             if (!res.ok) failedFiles.push(`${file.name}::${entry.name}`);
           } catch (_e) {
+            console.error(`Error processing ${entry.name}:`, _e);
             failedFiles.push(`${file.name}::${entry.name}`);
+          }
+        }
+        
+        // Show import summary with folder info
+        const metaEntry = zip.file("meta.json");
+        if (metaEntry) {
+          try {
+            const metaText = await metaEntry.async("text");
+            const metaData = JSON.parse(metaText);
+            console.log(`Imported from export created at: ${metaData.exportedAt}`);
+            console.log(`Original export contained: ${metaData.counts?.folders || 0} folders, ${metaData.counts?.quizzes || 0} quizzes`);
+          } catch (_e) {
+            // Meta file parsing failure is not critical
           }
         }
       } catch (_e) {
@@ -478,8 +638,19 @@ export class UIController {
     // Show result modal
     const okCount = importedQuizIds.length;
     const failCount = failedFiles.length;
+    const folderCount = model.folders ? model.folders.size : 0;
     const summary = document.getElementById("dataImportSummaryText");
-    if (summary) summary.textContent = `Imported ${okCount} quiz${okCount === 1 ? "" : "zes"}${failCount ? `, ${failCount} failed` : ""}.`;
+    if (summary) {
+      let summaryText = `Imported ${okCount} quiz${okCount === 1 ? "" : "zes"}`;
+      if (folderCount > 0) {
+        summaryText += ` and ${folderCount} folder${folderCount === 1 ? "" : "s"}`;
+      }
+      if (failCount > 0) {
+        summaryText += `, ${failCount} failed`;
+      }
+      summaryText += ".";
+      summary.textContent = summaryText;
+    }
     const failedContainer = document.getElementById("dataImportFailedListContainer");
     const failedList = document.getElementById("dataImportFailedList");
     if (failedContainer && failedList) {
@@ -519,15 +690,54 @@ export class UIController {
   }
 
   openImportModal() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before importing quizzes.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before importing quizzes.");
+      }
+      return;
+    }
+
     this.openModal("importModal");
   }
 
   openCreateModal() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before creating a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before creating a new quiz.");
+      }
+      return;
+    }
+
     if (this.folderController) this.folderController.loadFoldersToSelect();
     this.openModal("createModal");
   }
 
   openPlayModal() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     if (this.playController) this.playController.loadFolders();
     // Reset quiz select display to show the placeholder each time
     const select = document.getElementById("playQuizSelect");
@@ -616,6 +826,19 @@ export class UIController {
   }
 
   confirmImportPlay() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     const quizId = this.importedQuizId;
     if (!quizId) return;
     const select = document.getElementById("importResultFolderSelect");
@@ -634,11 +857,37 @@ export class UIController {
   }
 
   openQuizOptions() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before accessing quiz options.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before accessing quiz options.");
+      }
+      return;
+    }
+
     this.openModal("quizOptionsModal");
   }
 
   // Recent quiz options
   openRecentQuizOptions(event, quizId) {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before accessing quiz options.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before accessing quiz options.");
+      }
+      return;
+    }
+
     event.stopPropagation();
     this.activeRecentQuizId = quizId;
     this.openModal("recentQuizOptionsModal");
@@ -699,6 +948,19 @@ export class UIController {
   }
 
   recentPlay() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     const quizId = this.activeRecentQuizId;
     if (!quizId) return;
     if (this.routerController) {
@@ -707,6 +969,7 @@ export class UIController {
       this.playController.startQuizById(quizId);
     }
     this.closeModal("recentQuizOptionsModal");
+    this.hideSidebar();
   }
 
   async recentDelete() {
@@ -725,12 +988,38 @@ export class UIController {
 
   // Folder Quiz Options
   openFolderQuizOptions(event, quizId) {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before accessing quiz options.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before accessing quiz options.");
+      }
+      return;
+    }
+
     event.stopPropagation();
     this.activeFolderQuizId = quizId;
     this.openModal("folderQuizOptionsModal");
   }
 
   folderQuizPlay() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     const quizId = this.activeFolderQuizId;
     if (!quizId) return;
     if (this.routerController) {
@@ -739,6 +1028,7 @@ export class UIController {
       this.playController.startQuizById(quizId);
     }
     this.closeModal("folderQuizOptionsModal");
+    this.hideSidebar();
   }
 
   async folderQuizRename() {
@@ -802,6 +1092,19 @@ export class UIController {
 
   // Quiz Options actions
   actionQuizJump() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before jumping to questions.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before jumping to questions.");
+      }
+      return;
+    }
+
     // Prefill jump input with current index + 1 and set bounds
     const model = (this.quizController || window.quizController).model;
     const input = document.getElementById("jumpQuestionInput");
@@ -824,6 +1127,19 @@ export class UIController {
   }
 
   confirmJumpToQuestion() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before jumping to questions.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before jumping to questions.");
+      }
+      return;
+    }
+
     const model = (this.quizController || window.quizController).model;
     const input = document.getElementById("jumpQuestionInput");
     if (!model || !model.currentQuiz || !input) return;
@@ -836,6 +1152,19 @@ export class UIController {
   }
 
   actionQuizPlay() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     const model = (this.quizController || window.quizController).model;
     const quiz = model ? model.currentQuiz : null;
     if (!quiz) return;
@@ -845,9 +1174,23 @@ export class UIController {
       this.playController.startQuizById(quiz.id);
     }
     this.closeModal("quizOptionsModal");
+    this.hideSidebar();
   }
 
   actionQuizLock() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before changing quiz settings.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before changing quiz settings.");
+      }
+      return;
+    }
+
     if (!this.quizController || !this.quizController.model.currentQuiz) {
       this.closeModal("quizOptionsModal");
       return;
@@ -882,6 +1225,19 @@ export class UIController {
   }
 
   actionQuizDelete() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before deleting quizzes.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before deleting quizzes.");
+      }
+      return;
+    }
+
     this.closeModal("quizOptionsModal");
     this.openModal("confirmDeleteModal");
   }
@@ -934,6 +1290,19 @@ export class UIController {
   }
 
   showHomePage() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
     const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
@@ -952,6 +1321,19 @@ export class UIController {
   }
 
   showQuizEditor() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
     const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
@@ -979,6 +1361,19 @@ export class UIController {
   }
 
   exitPlayUI() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before leaving play mode.",
+          "Exit Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before leaving play mode.");
+      }
+      return;
+    }
+
     const score = document.getElementById("scoreBadge");
     const saveBtn = document.getElementById("saveBtn");
     const addBtn = document.getElementById("addBtn");
@@ -990,6 +1385,19 @@ export class UIController {
   }
 
   showResultsPage() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
     const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
@@ -1076,6 +1484,19 @@ export class UIController {
 
   // Settings Page Navigation
   showSettingsPage() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
     const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
@@ -1084,38 +1505,68 @@ export class UIController {
     if (home) home.classList.add("hidden");
     if (folder) folder.classList.add("hidden");
     if (editor) editor.classList.remove("active");
-    if (search) search.classList.add("hidden");
     if (settings) settings.classList.remove("hidden");
-
+    if (search) search.classList.add("hidden");
+    
     // initialize theme select to current
     const current = (localStorage.getItem("theme") || "dark").toLowerCase();
     const select = document.getElementById("themeSelect");
     if (select) select.value = current;
-
+    
+    // Refresh icons
     if (window.lucide) {
       window.lucide.createIcons();
     }
   }
 
   exitSettings() {
-    if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
-      this.routerController.goBackOrHome();
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
+    // Use router to navigate to home and update URL
+    if (this.routerController) {
+      this.routerController.goToHome();
     } else {
+      // Fallback to just showing home page if router is not available
       this.showHomePage();
     }
   }
 
   showFolderPage() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
+    const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
     const settings = document.getElementById("settingsPage");
-    const folder = document.getElementById("folderPage");
     const search = document.getElementById("searchPage");
     if (home) home.classList.add("hidden");
+    if (folder) folder.classList.remove("hidden");
     if (editor) editor.classList.remove("active");
     if (settings) settings.classList.add("hidden");
     if (search) search.classList.add("hidden");
-    if (folder) folder.classList.remove("hidden");
+    
     // refresh icons
     if (window.lucide) {
       window.lucide.createIcons();
@@ -1123,16 +1574,28 @@ export class UIController {
   }
 
   showSearchPage(query = "", results = [], searchDetails = []) {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before navigating to other pages.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to other pages.");
+      }
+      return;
+    }
+
     const home = document.getElementById("homePage");
+    const folder = document.getElementById("folderPage");
     const editor = document.getElementById("quizEditor");
     const settings = document.getElementById("settingsPage");
-    const folder = document.getElementById("folderPage");
     const search = document.getElementById("searchPage");
-    
     if (home) home.classList.add("hidden");
+    if (folder) folder.classList.add("hidden");
     if (editor) editor.classList.remove("active");
     if (settings) settings.classList.add("hidden");
-    if (folder) folder.classList.add("hidden");
     if (search) search.classList.remove("hidden");
 
     // Update search page content
@@ -1155,12 +1618,38 @@ export class UIController {
 
   // Search Result Options
   openSearchResultOptions(event, quizId) {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before accessing quiz options.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before accessing quiz options.");
+      }
+      return;
+    }
+
     event.stopPropagation();
     this.activeSearchResultId = quizId;
     this.openModal("searchResultOptionsModal");
   }
 
   searchResultPlay() {
+    // Check if we're in play mode with an active session
+    if (this.playController && this.playController.session && this.playController.session.currentIndex > 0 && !this.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.showAlert(
+          "Please finish or exit your current quiz before starting a new one.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before starting a new one.");
+      }
+      return;
+    }
+
     const quizId = this.activeSearchResultId;
     if (!quizId) return;
     if (this.routerController) {

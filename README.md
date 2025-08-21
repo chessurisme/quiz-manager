@@ -8,6 +8,7 @@ A modern quiz management application built with vanilla JavaScript, featuring cl
 - **Quiz Management**: Create, edit, and organize quizzes in folders
 - **Multiple Quiz Types**: Multiple choice, emoji, riddle, and word scramble quizzes
 - **Play Mode**: Interactive quiz taking with scoring and feedback
+- **Audio Feedback**: Sound effects for correct/wrong answers and quiz completion
 - **Search**: Full-text search across all quizzes and questions
 - **Data Management**: Import/export functionality with IndexedDB storage
 - **Responsive Design**: Modern UI with dark/light theme support
@@ -78,6 +79,33 @@ In settings, there are options to change theme, data management, help, and about
 ### Search Bar
 
 When search bar is interact a search results page are shown, there will be of previous and next navigation. The search results will be shown in the main, where the search provide quizzes which can be interact to edit or play.
+
+## Audio Features
+
+The Quiz Manager includes immersive audio feedback to enhance the quiz-taking experience:
+
+### Sound Effects
+- **Correct Answer**: Plays a positive sound when answering correctly
+- **Wrong Answer**: Plays a different sound when answering incorrectly  
+- **Quiz Completion**: Plays a celebratory sound when finishing a quiz
+
+### Audio Controls
+During quiz play mode, audio controls appear in the quiz editor header:
+- **Mute/Unmute Button**: Toggle sound on/off with visual feedback
+- **Volume Slider**: Adjust volume from 0-100%
+- **Persistent Settings**: Audio preferences are saved to localStorage
+
+### Audio Manager
+The `AudioManager` class handles all audio functionality:
+- Automatic sound preloading for smooth playback
+- Browser compatibility handling for audio context
+- Volume control and mute state management
+- Error handling for missing or failed audio files
+
+### Supported Audio Formats
+- MP3 files for optimal compatibility
+- Preloaded audio for instant response
+- Multiple simultaneous sound support
 
 ### Quiz Editor
 

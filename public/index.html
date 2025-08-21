@@ -15,13 +15,13 @@
 
     <!-- Third-party libraries are bundled by Vite; no CDN scripts needed -->
 
-    <!-- Styles -->
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/assets/favicons/ios/32.png" type="image/png" sizes="32x32">
-    <link rel="icon" href="/assets/favicons/ios/16.png" type="image/png" sizes="16x16">
-    <link rel="apple-touch-icon" href="/assets/favicons/ios/180.png">
-    <script type="module" crossorigin src="./assets/index-BAQsgH83.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D2fjRAHm.css">
+    <!-- Styles -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./assets/favicons/ios/32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="./assets/favicons/ios/16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="./assets/favicons/ios/180.png">
+    <script type="module" crossorigin src="./assets/index-hiuGWGuK.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-I_dKZlPF.css">
   </head>
   <body>
     <div class="app-container">
@@ -153,6 +153,10 @@
                  <div class="folder-item" onclick="uiController.openSettingsData()">
                    <i data-lucide="database" width="20" height="20"></i>
                    <span>Data Management</span>
+                 </div>
+                 <div class="folder-item" onclick="uiController.openSettingsAudio()">
+                   <i data-lucide="volume-2" width="20" height="20"></i>
+                   <span>Audio</span>
                  </div>
                  
                  <div class="sidebar-label" style="margin: var(--size-base) 0 var(--size-s) 0;">Others</div>
@@ -388,6 +392,60 @@
         </div>
       </div>
 
+      <!-- Settings: Audio Modal -->
+      <div class="modal-overlay" id="settingsAudioModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 class="modal-title">Audio Settings</h3>
+          </div>
+          <div class="modal-content">
+            <div class="settings-grid">
+              <section class="settings-section">
+                <div class="settings-row">
+                  <label for="audioMuteToggle" class="settings-label">Sound Effects</label>
+                  <div class="settings-control">
+                    <button id="audioMuteToggle" class="btn-secondary settings-control-inline" onclick="audioManager.toggleMute()">
+                      <i data-lucide="volume-2" width="20" height="20" id="audioMuteIcon"></i>
+                      <span id="audioMuteText">Unmuted</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <label for="audioVolumeSlider" class="settings-label">Volume</label>
+                  <div class="settings-control">
+                    <div class="volume-control">
+                      <input type="range" id="audioVolumeSlider" min="0" max="100" value="70" class="volume-slider" 
+                             oninput="audioManager.setVolume(this.value / 100)" title="Volume">
+                      <span id="audioVolumeValue" class="volume-value">70%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <label class="settings-label">Test Sounds</label>
+                  <div class="settings-control">
+                    <div class="test-sounds-row">
+                      <button class="btn-secondary settings-control-inline" onclick="audioManager.playCorrect()">
+                        <i data-lucide="check-circle" width="20" height="20"></i>
+                        <span>Correct</span>
+                      </button>
+                      <button class="btn-secondary settings-control-inline" onclick="audioManager.playWrong()">
+                        <i data-lucide="x-circle" width="20" height="20"></i>
+                        <span>Wrong</span>
+                      </button>
+                      <button class="btn-secondary settings-control-inline" onclick="audioManager.playGameComplete()">
+                        <i data-lucide="trophy" width="20" height="20"></i>
+                        <span>Complete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="modal-actions"></div>
+        </div>
+      </div>
+
       <!-- Settings: Data Help Modal -->
       <div class="modal-overlay" id="settingsDataHelpModal">
         <div class="modal">
@@ -401,7 +459,7 @@
             <div style="display:flex; flex-direction:column; gap:12px;">
               <section>
                 <div class="sidebar-label" style="margin-bottom:6px;">Export</div>
-                <p style="margin:0 0 6px 0; opacity:.9;">Choose specific quiz types or leave all unchecked to export everything. The download is a ZIP with subfolders by type to keep things tidy and avoid oversized files.</p>
+                <p style="margin:0 0 6px 0; opacity:.9;">Choose specific quiz types or leave all unchecked to export everything. The download is a ZIP with subfolders by type to keep things tidy and avoid oversized files. The ZIP also includes metadata files (meta.json, folders.json) for reference.</p>
               </section>
               <section>
                 <div class="sidebar-label" style="margin-bottom:6px;">Import</div>
@@ -409,6 +467,7 @@
                   <li>Select one or more <code>.json</code> and/or <code>.zip</code> files.</li>
                   <li>We will import all valid quizzes and show a summary of anything that failed.</li>
                   <li>ZIPs can contain many JSON quizzes inside (organized however you like).</li>
+                  <li><strong>Note:</strong> When importing exported ZIP files, metadata files (meta.json, folders.json) are automatically skipped as they're not quiz data.</li>
                 </ul>
               </section>
               <section>
@@ -598,6 +657,7 @@
                 <option value="ws-quiz">Word Scramble</option>
               </select>
             </div>
+
             <div class="quiz-field">
               <div class="quiz-field-label">Select Folder</div>
               <select
@@ -993,11 +1053,11 @@
         </div>
       </div>
     </div>
-
+
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js').then(reg => {
+          navigator.serviceWorker.register('/sw.js').then(reg => {
             console.log('[SW] Registered with scope:', reg.scope);
             if (reg.waiting) {
               reg.waiting.postMessage({ type: 'SKIP_WAITING' });

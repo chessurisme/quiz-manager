@@ -29,7 +29,7 @@ export class QuizController {
       return;
     }
 
-    const quiz = this.model.createQuiz(name, type, folderId);
+    const quiz = this.model.createQuiz(name, type, folderId, "medium");
     this.model.currentQuiz = quiz;
     this.model.currentQuestionIndex = 0;
 
@@ -137,9 +137,15 @@ export class QuizController {
       textarea.style.height = textarea.scrollHeight + 'px';
       textarea.addEventListener('input', function () {
         this.style.height = '';
-        this.style.height = this.scrollHeight + 'px';
+        this.style.height = textarea.scrollHeight + 'px';
       });
     });
+    
+    // Re-initialize Lucide icons for newly rendered content
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
+    
     this.updateProgressBadge();
   }
 
@@ -221,7 +227,7 @@ export class QuizController {
       return;
     }
     
-    const newQuestion = this.model.createEmptyQuestion(quiz.type);
+    const newQuestion = this.model.createEmptyQuestion(quiz.type, "medium");
     quiz.questions.push(newQuestion);
     this.model.currentQuestionIndex = quiz.questions.length - 1;
 
@@ -243,6 +249,95 @@ export class QuizController {
 
     this.model.unsavedQuiz = quiz;
     if (this.uiController) this.uiController.updateBackToUnsavedButton(true);
+  }
+
+  toggleDifficulty(index) {
+    const quiz = this.model.currentQuiz;
+    const question = quiz.questions[index];
+    
+    if (!question || quiz.locked) return;
+    
+    // Cycle through difficulty levels: easy -> medium -> hard -> easy
+    const difficulties = ['easy', 'medium', 'hard'];
+    const currentIndex = difficulties.indexOf(question.difficulty || 'medium');
+    const nextIndex = (currentIndex + 1) % difficulties.length;
+    const newDifficulty = difficulties[nextIndex];
+    
+    this.updateQuestion(index, 'difficulty', newDifficulty);
+    this.renderQuizContent(); // Re-render to update the active icon
+  }
+
+  generateScrambledWord(index) {
+    const quiz = this.model.currentQuiz;
+    const question = quiz.questions[index];
+    
+    if (!question.word || question.word.trim() === "") {
+      if (this.uiController && typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert("Please enter a word first before generating a scrambled version.", "Validation");
+      } else {
+        alert("Please enter a word first before generating a scrambled version.");
+      }
+      return;
+    }
+
+    const originalWord = question.word.trim();
+    let scrambledWord = originalWord;
+    
+    // Keep generating scrambled words until we get one that's different from the original
+    let attempts = 0;
+    const maxAttempts = 100; // Prevent infinite loops for very short words
+    
+    while (scrambledWord === originalWord && attempts < maxAttempts) {
+      // Convert word to array of characters and shuffle
+      const wordArray = originalWord.split('');
+      const scrambledArray = this.shuffleArray(wordArray);
+      scrambledWord = scrambledArray.join('');
+      attempts++;
+    }
+    
+    // If we still have the same word after max attempts, manually swap first two characters
+    if (scrambledWord === originalWord && originalWord.length > 1) {
+      const chars = originalWord.split('');
+      // Try different swapping strategies
+      if (chars.length === 2) {
+        // For 2-letter words, just swap them
+        [chars[0], chars[1]] = [chars[1], chars[0]];
+      } else if (chars.length > 2) {
+        // For longer words, try swapping characters at different positions
+        const firstChar = chars[0];
+        const lastChar = chars[chars.length - 1];
+        if (firstChar !== lastChar) {
+          // Swap first and last characters
+          chars[0] = lastChar;
+          chars[chars.length - 1] = firstChar;
+        } else {
+          // If first and last are same, swap first with middle character
+          const midIndex = Math.floor(chars.length / 2);
+          [chars[0], chars[midIndex]] = [chars[midIndex], chars[0]];
+        }
+      }
+      scrambledWord = chars.join('');
+      
+      // Final check: if still the same (e.g., "AAA"), add a suffix to make it different
+      if (scrambledWord === originalWord) {
+        scrambledWord = originalWord + "!";
+      }
+    }
+
+    // Update the scrambled word field
+    this.updateQuestion(index, 'scrambledWord', scrambledWord);
+    
+    // Re-render the content to show the updated scrambled word
+    this.renderQuizContent();
+  }
+
+  shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }
 
   updateNavigationButtons() {

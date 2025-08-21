@@ -9,11 +9,37 @@ export class FolderController {
   }
 
   createNewFolder() {
+    // Check if we're in play mode with an active session
+    if (this.uiController && this.uiController.playController && this.uiController.playController.session && this.uiController.playController.session.currentIndex > 0 && !this.uiController.playController.isQuizCompleted) {
+      if (typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert(
+          "Please finish or exit your current quiz before creating folders.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before creating folders.");
+      }
+      return;
+    }
+
     // Open modal instead of prompt
     this.openCreateFolderModal();
   }
 
   openCreateFolderModal() {
+    // Check if we're in play mode with an active session
+    if (this.uiController && this.uiController.playController && this.uiController.playController.session && this.uiController.playController.session.currentIndex > 0 && !this.uiController.playController.isQuizCompleted) {
+      if (typeof this.showAlert === "function") {
+        this.uiController.showAlert(
+          "Please finish or exit your current quiz before creating folders.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before creating folders.");
+      }
+      return;
+    }
+
     const input = document.getElementById("newFolderNameInput");
     if (input) input.value = "";
     if (this.uiController && typeof this.uiController.openModal === "function") {
@@ -152,6 +178,19 @@ export class FolderController {
   }
 
   selectFolder(folderId) {
+    // Check if we're in play mode with an active session
+    if (this.uiController && this.uiController.playController && this.uiController.playController.session && this.uiController.playController.session.currentIndex > 0 && !this.uiController.playController.isQuizCompleted) {
+      if (typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert(
+          "Please finish or exit your current quiz before navigating to folders.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to folders.");
+      }
+      return;
+    }
+
     this.activeFolderId = folderId;
     if (this.routerController) {
       this.routerController.goToFolder(folderId);
@@ -164,6 +203,19 @@ export class FolderController {
   }
 
   openFolder(folderId) {
+    // Check if we're in play mode with an active session
+    if (this.uiController && this.uiController.playController && this.uiController.playController.session && this.uiController.playController.session.currentIndex > 0 && !this.uiController.playController.isQuizCompleted) {
+      if (typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert(
+          "Please finish or exit your current quiz before navigating to folders.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before navigating to folders.");
+      }
+      return;
+    }
+
     this.activeFolderId = folderId;
     this.renderFolderPage(folderId);
     if (this.uiController && typeof this.uiController.hideSidebar === "function") {
@@ -215,6 +267,19 @@ export class FolderController {
   }
 
   openFolderOptions(event, folderId) {
+    // Check if we're in play mode with an active session
+    if (this.uiController && this.uiController.playController && this.uiController.playController.session && this.uiController.playController.session.currentIndex > 0 && !this.uiController.playController.isQuizCompleted) {
+      if (typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert(
+          "Please finish or exit your current quiz before accessing folder options.",
+          "Navigation Blocked"
+        );
+      } else {
+        alert("Please finish or exit your current quiz before accessing folder options.");
+      }
+      return;
+    }
+
     event.stopPropagation();
     this.activeFolderId = folderId;
     if (this.uiController && typeof this.uiController.openModal === "function") {
@@ -263,8 +328,14 @@ export class FolderController {
     this.loadFolders();
     // If we were viewing this folder, go back home
     const titleEl = document.getElementById("folderPageTitle");
-    if (titleEl && this.activeFolderId === folderId && this.uiController) {
-      if (typeof this.uiController.showHomePage === "function") this.uiController.showHomePage();
+    if (titleEl && this.activeFolderId === folderId) {
+      // Use router to navigate to home and update URL
+      if (this.routerController && typeof this.routerController.goToHome === "function") {
+        this.routerController.goToHome();
+      } else if (this.uiController && typeof this.uiController.showHomePage === "function") {
+        // Fallback to just showing home page if router is not available
+        this.uiController.showHomePage();
+      }
     }
     if (this.uiController && typeof this.uiController.closeModal === "function") {
       this.uiController.closeModal("folderOptionsModal");

@@ -7,7 +7,7 @@ export default defineConfig({
   // from the project-level `public` directory during dev
   publicDir: '../public',
   build: {
-    outDir: '../public',
+    outDir: '../dist',
     emptyOutDir: true,
   },
 });
