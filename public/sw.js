@@ -1,5 +1,5 @@
 // Update this version number whenever you want to force cache updates
-const CACHE_VERSION = "v7"; // Change this when you update your app
+const CACHE_VERSION = "v9"; // Change this when you update your app
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 const SHARE_CACHE = "share-cache";
 const OFFLINE_URL = "/offline.html";
