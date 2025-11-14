@@ -881,17 +881,19 @@ export class UIController {
     this.closeModal("quizOptionsModal");
   }
 
-  actionQuizDelete() {
+  actionQuizDeleteQuestion() {
     this.closeModal("quizOptionsModal");
     this.openModal("confirmDeleteModal");
   }
 
-  cancelDeleteQuiz() {
+  cancelDeleteQuestion() {
     this.closeModal("confirmDeleteModal");
   }
 
-  confirmDeleteQuiz() {
-    if (this.quizController) this.quizController.deleteCurrentQuiz();
+  confirmDeleteQuestion() {
+    if (this.quizController && typeof this.quizController.deleteCurrentQuestion === "function") {
+      this.quizController.deleteCurrentQuestion();
+    }
     this.closeModal("confirmDeleteModal");
   }
 

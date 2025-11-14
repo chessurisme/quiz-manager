@@ -769,9 +769,9 @@
 							<i data-lucide="lock" width="20" height="20"></i>
 							<span>Lock Quiz</span>
 						</div>
-						<div class="folder-item delete-item" onclick="uiController.actionQuizDelete()">
+						<div class="folder-item delete-item" onclick="uiController.actionQuizDeleteQuestion()">
 							<i data-lucide="trash-2" width="20" height="20"></i>
-							<span>Delete Quiz</span>
+							<span>Delete Question</span>
 						</div>
 					</div>
 				</div>
@@ -1038,19 +1038,19 @@
 			<div class="modal-overlay" id="confirmDeleteModal">
 				<div class="modal">
 					<div class="modal-header">
-						<h3 class="modal-title">Delete Quiz</h3>
+						<h3 class="modal-title">Delete Question</h3>
 						<button class="icon-button" onclick="uiController.closeModal('confirmDeleteModal')">
 							<i data-lucide="x" width="24" height="24"></i>
 						</button>
 					</div>
 					<div class="modal-content">
-						<p>Are you sure you want to delete this quiz?</p>
+						<p>Are you sure you want to delete the current question?</p>
 						<div class="modal-actions">
-							<button class="btn-secondary" onclick="uiController.cancelDeleteQuiz()">Cancel</button>
+							<button class="btn-secondary" onclick="uiController.cancelDeleteQuestion()">Cancel</button>
 							<button
 								class="btn-primary"
 								style="background: var(--color-error)"
-								onclick="uiController.confirmDeleteQuiz()"
+								onclick="uiController.confirmDeleteQuestion()"
 							>
 								Delete
 							</button>
