@@ -69,6 +69,9 @@ export class QuizController {
     this.updateNavigationButtons();
 
     if (this.uiController) this.uiController.showQuizEditor();
+    
+    // Set up keyboard handler for delete key
+    this._setupKeyboardHandlers();
   }
 
   openEditorById(quizId) {
@@ -230,6 +233,52 @@ export class QuizController {
     this.updateNavigationButtons();
   }
 
+  deleteCurrentQuestion() {
+    const quiz = this.model.currentQuiz;
+    if (!quiz) return;
+    
+    // Check if quiz is locked
+    if (quiz.locked) {
+      if (this.uiController && typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert("Quiz is locked. Unlock it first to make changes.");
+      } else {
+        alert("Quiz is locked. Unlock it first to make changes.");
+      }
+      return;
+    }
+    
+    // Prevent deletion if there's only one question
+    if (quiz.questions.length <= 1) {
+      if (this.uiController && typeof this.uiController.showAlert === "function") {
+        this.uiController.showAlert("Cannot delete the last question. A quiz must have at least one question.");
+      } else {
+        alert("Cannot delete the last question. A quiz must have at least one question.");
+      }
+      return;
+    }
+    
+    const currentIndex = this.model.currentQuestionIndex;
+    
+    // Remove the current question
+    quiz.questions.splice(currentIndex, 1);
+    
+    // Adjust the current index if necessary
+    // If we deleted the last question, move to the new last question
+    if (currentIndex >= quiz.questions.length) {
+      this.model.currentQuestionIndex = quiz.questions.length - 1;
+    }
+    // Otherwise, stay at the same index (which now points to the next question)
+    
+    // Mark as unsaved
+    this.model.unsavedQuiz = quiz;
+    if (this.uiController) this.uiController.updateBackToUnsavedButton(true);
+    
+    // Re-render the content
+    this.renderQuizContent();
+    this.renderQuizIndex();
+    this.updateNavigationButtons();
+  }
+
   updateQuestion(index, field, value) {
     const quiz = this.model.currentQuiz;
     const question = quiz.questions[index];
@@ -261,7 +310,43 @@ export class QuizController {
     } else {
       nextBtn.classList.remove("disabled");
     }
+    
     this.updateProgressBadge();
+  }
+  
+  _setupKeyboardHandlers() {
+    // Remove existing handler if any
+    if (this._keyboardHandler) {
+      document.removeEventListener("keydown", this._keyboardHandler);
+    }
+    
+    // Create new handler
+    this._keyboardHandler = (e) => {
+      // Only handle delete key when in editor (not play mode) and we have a current quiz
+      if (this._isPlayActive() || !this.model.currentQuiz) return;
+      
+      // Don't handle if user is typing in an input field
+      const activeElement = document.activeElement;
+      if (activeElement && (
+        activeElement.tagName === "INPUT" || 
+        activeElement.tagName === "TEXTAREA" ||
+        activeElement.isContentEditable
+      )) {
+        return;
+      }
+      
+      // Handle Delete key (not Backspace, as Delete is more explicit for deletion)
+      if (e.key === "Delete" || (e.key === "Backspace" && !e.shiftKey && !e.ctrlKey && !e.metaKey)) {
+        // Only if we're in the quiz editor (check visibility)
+        const quizEditor = document.getElementById("quizEditor");
+        if (quizEditor && !quizEditor.classList.contains("hidden")) {
+          e.preventDefault();
+          this.deleteCurrentQuestion();
+        }
+      }
+    };
+    
+    document.addEventListener("keydown", this._keyboardHandler);
   }
 
   updateProgressBadge() {
@@ -336,6 +421,12 @@ export class QuizController {
   }
 
   exitEditorForce() {
+    // Clean up keyboard handler
+    if (this._keyboardHandler) {
+      document.removeEventListener("keydown", this._keyboardHandler);
+      this._keyboardHandler = null;
+    }
+    
     this.model.currentQuiz = null;
     this.model.currentQuestionIndex = 0;
     if (this.routerController && typeof this.routerController.goBackOrHome === 'function') {
