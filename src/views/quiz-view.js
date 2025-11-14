@@ -16,7 +16,7 @@ export class QuizView {
     }
 
     return `
-      <div class="quiz-grid quiz-grid-mc">
+      <div class="quiz-grid quiz-grid-mc ${isPlayMode ? "play-mode" : ""}">
         <div class="quiz-field question">
           <textarea placeholder="Enter question..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'question', this.value)"
@@ -51,8 +51,8 @@ export class QuizView {
   renderRiddle(question, index, isPlayMode = false, isLocked = false) {
     const isReadOnly = isPlayMode || isLocked;
     return `
-      <div class="quiz-grid quiz-grid-riddle">
-        <div class="quiz-field">
+      <div class="quiz-grid quiz-grid-riddle ${isPlayMode ? "play-mode" : ""}">
+        <div class="quiz-field ${isPlayMode ? "question" : ""}">
           <div class="quiz-field-label">Question</div>
           <textarea placeholder="Enter riddle question..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'question', this.value)">${
@@ -87,7 +87,7 @@ export class QuizView {
   renderWordScramble(question, index, isPlayMode = false, isLocked = false) {
     const isReadOnly = isPlayMode || isLocked;
     return `
-      <div class="quiz-grid quiz-grid-scramble">
+      <div class="quiz-grid quiz-grid-scramble ${isPlayMode ? "play-mode" : ""}">
         ${!isPlayMode ? `
         <div class="quiz-field">
           <div class="quiz-field-label">Word</div>
@@ -113,8 +113,8 @@ export class QuizView {
   renderEmoji(question, index, isPlayMode = false, isLocked = false) {
     const isReadOnly = isPlayMode || isLocked;
     return `
-      <div class="quiz-grid quiz-grid-emoji">
-        <div class="quiz-field">
+      <div class="quiz-grid quiz-grid-emoji ${isPlayMode ? "play-mode" : ""}">
+        <div class="quiz-field ${isPlayMode ? "question" : ""}">
           <div class="quiz-field-label">Question</div>
           <textarea placeholder="Enter question..." ${isReadOnly ? "readonly" : ""}
             onchange="quizController.updateQuestion(${index}, 'question', this.value)">${

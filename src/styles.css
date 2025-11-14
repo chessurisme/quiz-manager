@@ -849,6 +849,16 @@ select {
   letter-spacing: 1px;
 }
 
+/* Play Mode: Center and size question text */
+.quiz-grid.play-mode .quiz-field.question textarea {
+  text-align: center;
+  font-size: var(--size-l);
+}
+
+.quiz-grid.play-mode .quiz-field.question .quiz-field-label {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
