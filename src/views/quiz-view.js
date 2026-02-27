@@ -39,10 +39,13 @@ export class QuizView {
           .join("")}
         ${!isPlayMode ? `
         <div class="quiz-field references">
-          <textarea placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)"
-            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${question.references || ""}</textarea>
+          <div class="references-body">
+            <textarea placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)"
+              oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${question.references || ""}</textarea>
+          </div>
+          ${this._renderDifficultyTile(question.difficulty, index, isLocked)}
         </div>` : ""}
       </div>
     `;
@@ -74,11 +77,14 @@ export class QuizView {
           <input type="text" placeholder="Type your answer..." oninput="playController.captureTextAnswer(this.value)">
         </div>` : ""}
         ${!isPlayMode ? `
-        <div class="quiz-field">
-          <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+        <div class="quiz-field references">
+          <div class="references-body">
+            <div class="quiz-field-label">References</div>
+            <input type="text" value="${question.references || ""}" placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+          </div>
+          ${this._renderDifficultyTile(question.difficulty, index, isLocked)}
         </div>` : ""}
       </div>
     `;
@@ -105,6 +111,11 @@ export class QuizView {
         <div class="quiz-field">
           <div class="quiz-field-label">Your Answer</div>
           <input type="text" placeholder="Unscramble and type the word..." oninput="playController.captureTextAnswer(this.value)">
+        </div>` : ""}
+        ${!isPlayMode ? `
+        <div class="quiz-field references">
+          <div class="references-body"></div>
+          ${this._renderDifficultyTile(question.difficulty, index, isLocked)}
         </div>` : ""}
       </div>
     `;
@@ -142,14 +153,28 @@ export class QuizView {
           <input type="text" placeholder="Type your answer..." oninput="playController.captureTextAnswer(this.value)">
         </div>` : ""}
         ${!isPlayMode ? `
-        <div class="quiz-field">
-          <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+        <div class="quiz-field references">
+          <div class="references-body">
+            <div class="quiz-field-label">References</div>
+            <input type="text" value="${question.references || ""}" placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+          </div>
+          ${this._renderDifficultyTile(question.difficulty, index, isLocked)}
         </div>` : ""}
       </div>
     `;
+  }
+
+  _renderDifficultyTile(difficulty, index, isLocked) {
+    const current = difficulty || 'Easy';
+    return `<div class="difficulty-tile difficulty-${current.toLowerCase()}"
+      data-difficulty="${current}"
+      ${isLocked ? 'style="pointer-events:none;opacity:0.5"' : ''}
+      ondblclick="quizController.cycleDifficulty(${index}, this)"
+      title="Double-tap to change difficulty">
+      <span class="difficulty-label">${current}</span>
+    </div>`;
   }
 
   shuffleArray(array) {

@@ -52,6 +52,7 @@ export class QuizModel {
           question: "",
           choices: ["", "", "", ""],
           references: "",
+          difficulty: "",
         };
       case "ej-quiz":
         return {
@@ -59,17 +60,20 @@ export class QuizModel {
           emoji: "",
           answers: [""],
           references: "",
+          difficulty: "",
         };
       case "rd-quiz":
         return {
           question: "",
           answers: [""],
           references: "",
+          difficulty: "",
         };
       case "ws-quiz":
         return {
           word: "",
           scrambledWord: "",
+          difficulty: "",
         };
       default:
         return {};

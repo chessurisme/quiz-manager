@@ -794,7 +794,9 @@ select {
   width: 100%;
   min-height: 60px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--size-xs);
 }
 
 .quiz-grid-emoji,
@@ -847,6 +849,68 @@ select {
   margin-bottom: var(--size-xs);
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+/* References field row layout for difficulty tile */
+.quiz-field.references {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--size-xs);
+}
+
+.references-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Difficulty tile */
+.difficulty-tile {
+  flex: 0 0 25%;
+  border-radius: var(--size-xs);
+  padding: var(--size-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  font-size: var(--size-s);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-base);
+  min-height: 40px;
+  border: 2px solid transparent;
+  align-self: stretch;
+}
+
+.difficulty-tile:active {
+  transform: scale(0.95);
+}
+
+.difficulty-tile:hover {
+  filter: brightness(1.2);
+}
+
+.difficulty-easy {
+  background: rgba(76, 175, 80, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.difficulty-medium {
+  background: rgba(255, 152, 0, 0.15);
+  border-color: #ff9800;
+  color: #ff9800;
+}
+
+.difficulty-hard {
+  background: rgba(244, 67, 54, 0.15);
+  border-color: var(--color-error);
+  color: var(--color-error);
 }
 
 /* Play Mode: Center and size question text */

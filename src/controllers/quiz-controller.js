@@ -349,6 +349,17 @@ export class QuizController {
     document.addEventListener("keydown", this._keyboardHandler);
   }
 
+  cycleDifficulty(index, el) {
+    const levels = ['Easy', 'Medium', 'Hard'];
+    const current = el.dataset.difficulty;
+    const ci = levels.indexOf(current);
+    const next = (ci === -1 || ci === levels.length - 1) ? levels[0] : levels[ci + 1];
+    el.dataset.difficulty = next;
+    el.className = 'difficulty-tile difficulty-' + next.toLowerCase();
+    el.querySelector('.difficulty-label').textContent = next;
+    this.updateQuestion(index, 'difficulty', next);
+  }
+
   updateProgressBadge() {
     const quiz = this.model.currentQuiz;
     if (!quiz) return;
