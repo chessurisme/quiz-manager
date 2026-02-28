@@ -31,6 +31,7 @@ export class QuizModel {
       folderId,
       questions: [],
       locked: false,
+      difficulty: "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

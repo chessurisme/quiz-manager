@@ -38,11 +38,14 @@ export class QuizView {
           })
           .join("")}
         ${!isPlayMode ? `
-        <div class="quiz-field references">
-          <textarea placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)"
-            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${question.references || ""}</textarea>
+        <div class="references-row">
+          <div class="quiz-field references">
+            <textarea placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)"
+              oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${question.references || ""}</textarea>
+          </div>
+          ${this.renderDifficultyTile()}
         </div>` : ""}
       </div>
     `;
@@ -74,11 +77,14 @@ export class QuizView {
           <input type="text" placeholder="Type your answer..." oninput="playController.captureTextAnswer(this.value)">
         </div>` : ""}
         ${!isPlayMode ? `
-        <div class="quiz-field">
-          <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+        <div class="references-row">
+          <div class="quiz-field">
+            <div class="quiz-field-label">References</div>
+            <input type="text" value="${question.references || ""}" placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+          </div>
+          ${this.renderDifficultyTile()}
         </div>` : ""}
       </div>
     `;
@@ -142,14 +148,26 @@ export class QuizView {
           <input type="text" placeholder="Type your answer..." oninput="playController.captureTextAnswer(this.value)">
         </div>` : ""}
         ${!isPlayMode ? `
-        <div class="quiz-field">
-          <div class="quiz-field-label">References</div>
-          <input type="text" value="${question.references || ""}" placeholder="Enter references..." 
-            ${isLocked ? "readonly" : ""}
-            onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+        <div class="references-row">
+          <div class="quiz-field">
+            <div class="quiz-field-label">References</div>
+            <input type="text" value="${question.references || ""}" placeholder="Enter references..."
+              ${isLocked ? "readonly" : ""}
+              onchange="quizController.updateQuestion(${index}, 'references', this.value)">
+          </div>
+          ${this.renderDifficultyTile()}
         </div>` : ""}
       </div>
     `;
+  }
+
+  renderDifficultyTile() {
+    const quiz = window.quizController ? window.quizController.model.currentQuiz : null;
+    const difficulty = quiz ? (quiz.difficulty || "") : "";
+    const labels = { "": "Easy", "easy": "Easy", "medium": "Medium", "hard": "Hard" };
+    const label = labels[difficulty] || "Easy";
+    const cssClass = difficulty || "easy";
+    return `<div class="difficulty-tile difficulty-${cssClass}" ondblclick="quizController.cycleDifficulty()">${label}</div>`;
   }
 
   shuffleArray(array) {

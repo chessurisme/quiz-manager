@@ -349,6 +349,22 @@ export class QuizController {
     document.addEventListener("keydown", this._keyboardHandler);
   }
 
+  cycleDifficulty() {
+    const quiz = this.model.currentQuiz;
+    if (!quiz) return;
+    const levels = ["", "medium", "hard"];
+    const currentIndex = levels.indexOf(quiz.difficulty ?? "");
+    quiz.difficulty = levels[(currentIndex + 1) % levels.length];
+    this.model.unsavedQuiz = quiz;
+    if (this.uiController) this.uiController.updateBackToUnsavedButton(true);
+    const labels = { "": "Easy", "medium": "Medium", "hard": "Hard" };
+    const tile = document.querySelector(".difficulty-tile");
+    if (tile) {
+      tile.textContent = labels[quiz.difficulty] || "Easy";
+      tile.className = `difficulty-tile difficulty-${quiz.difficulty || "easy"}`;
+    }
+  }
+
   updateProgressBadge() {
     const quiz = this.model.currentQuiz;
     if (!quiz) return;
